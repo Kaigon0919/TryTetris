@@ -26,7 +26,7 @@ class Tetris
 {
 private:
 	int x, y;
-	char board[BOARD_M][BOARD_N];
+	char board[BOARD_N][BOARD_M];
 	Brick brick;
 	float gameSpeed;
 private:
@@ -35,6 +35,8 @@ private:
 	void drawBrick(char (*brick)[5]);
 	bool IsColision(char(*brick)[5]);
 	void CursorView(char show);
+	void StackBrick(char (*brick)[5]);
+	void LineFull();
 public:
 	Tetris();
 	void Init();

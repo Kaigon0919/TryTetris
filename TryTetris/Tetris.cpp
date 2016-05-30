@@ -12,12 +12,12 @@ void Tetris::drawBoard()
 	{
 		for (int j = 0; j < BOARD_N; ++j)
 		{
-			if (board[i][j] == 3)
+			if (board[j][i] == 3)
 			{
 				gotoxy(j*BOARD_WIDTH, i);
 				cout << "■";
 			}
-			else if(board[i][j] >0)
+			else if(board[j][i] >0)
 			{
 				gotoxy(j*BOARD_WIDTH, i);
 				cout << "□";
@@ -47,12 +47,13 @@ bool Tetris::IsColision(char(*brick)[5])
 {
 	for (int i = 0; i < 5; ++i)
 	{
+		if (i + x < 0)
+			continue;
 		for (int j = 0; j < 5; ++j)
 		{
-			cout << (int)board[i + x][j + y];
-			if (i + x<0 || i + x>BOARD_N || j + y<0 || j + y>BOARD_M)
+			if (j + y < 1)
 				continue;
-			if(brick[i][j] + board[i+x][j+y] >3)
+			if (brick[i][j] + board[i + x][j + y] > 3)
 				return true;
 		}
 	}
@@ -69,6 +70,39 @@ void Tetris::CursorView(char show)
 	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
 }
 
+void Tetris::StackBrick(char(*brick)[5])
+{
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+			if(brick[i][j] !=0)
+				board[x+i][j+y]= 3;
+	}
+}
+
+void Tetris::LineFull()
+{
+	bool isLineFull;
+	for (int i = BOARD_M-2; i > 0; i--)
+	{
+		isLineFull = true;
+		for (int j = 1; j < BOARD_N - 1; j++)
+		{
+			if (board[j][i] != 3) {
+				isLineFull = false;
+				break;
+			}
+		}
+		if (isLineFull)
+		{
+			for (int z = i; z > 0; z--)
+				for (int j = 1; j < BOARD_N - 1; j++)
+					board[j][z] = board[j][z - 1];
+			i++;
+		}
+	}
+}
+
 Tetris::Tetris()
 {
 	for (int i = 0; i < BOARD_M ; ++i)
@@ -78,13 +112,13 @@ Tetris::Tetris()
 			board[i][j] = 0;
 		}
 	}
-	for (int i = 0; i < BOARD_M-1; ++i)
+	for (int i = 0; i < BOARD_M; ++i)
 	{
-		board[i][0] = 3;
-		board[i][BOARD_N - 1] = 3;
+		board[0][i] = 3;
+		board[BOARD_N - 1][i] = 3;
 	}
 	for (int i = 0; i < BOARD_N; ++i)
-		board[BOARD_M - 1][i] = 3;
+		board[i][BOARD_M - 1] = 3;
 	drawBoard();
 }
 
@@ -121,6 +155,12 @@ void Tetris::Run()
 				if (IsColision(test.shape[rot])) {
 					//특수
 					--y;
+					StackBrick(test.shape[rot]);
+					LineFull();
+					x = BRICK_START_X;
+					y = BRICK_START_Y;
+					test.SetBrick(rand() % 7);
+
 				}
 				break;
 			case RIGHT:
@@ -140,6 +180,8 @@ void Tetris::Run()
 				break;
 			case 'z':
 				rot = ++rot % 4;
+				while(IsColision(test.shape[rot]))
+					rot = rot - 1 < 0 ? 4 : rot - 1;
 				break;
 			case 'd':
 				x = BRICK_START_X;
@@ -155,8 +197,12 @@ void Tetris::Run()
 		{
 			y++;
 			if (IsColision(test.shape[rot])) {
-				//특수
 				--y;
+				StackBrick(test.shape[rot]);
+				LineFull();
+				x = BRICK_START_X;
+				y = BRICK_START_Y;
+				test.SetBrick(rand() % 7);
 			}
 			oldTime = timeGetTime();
 			system("cls");
