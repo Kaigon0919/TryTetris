@@ -22,7 +22,7 @@ using namespace std;
 #define BOARD_HEIGHT 2
 //BrickStart
 #define BRICK_START_X (BOARD_N/2-2)
-#define BRICK_START_Y -3
+#define BRICK_START_Y -2
 class Tetris
 {
 private:

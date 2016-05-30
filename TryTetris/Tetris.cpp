@@ -51,7 +51,7 @@ bool Tetris::IsColision(char(*brick)[5])
 			continue;
 		for (int j = 0; j < 5; ++j)
 		{
-			if (j + y < 1)
+			if (j + y < 0)
 				continue;
 			if (brick[i][j] + board[i + x][j + y] > 3)
 				return true;
@@ -105,8 +105,7 @@ void Tetris::LineFull()
 
 bool Tetris::IsGameOver()
 {
-	gotoxy(BRICK_START_X, 0);
-	return board[BRICK_START_X+3][0] == 3;
+	return board[BOARD_N / 2][0] == 3;
 }
 
 Tetris::Tetris()
@@ -160,7 +159,6 @@ void Tetris::Run()
 			case DOWN:
 				++y;
 				if (IsColision(brick.shape[rot])) {
-					//Æ¯¼ö
 					--y;
 					StackBrick(brick.shape[rot]);
 					LineFull();
@@ -206,6 +204,8 @@ void Tetris::Run()
 				brick.SetBrick(rand() % 7);
 				break;
 			}
+			if (IsGameOver())
+				return;
 			system("cls");
 			drawBoard();
 			drawBrick(brick.shape[rot]);
