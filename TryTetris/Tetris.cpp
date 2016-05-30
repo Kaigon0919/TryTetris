@@ -103,6 +103,12 @@ void Tetris::LineFull()
 	}
 }
 
+bool Tetris::IsGameOver()
+{
+	gotoxy(BRICK_START_X, 0);
+	return board[BRICK_START_X+3][0] == 3;
+}
+
 Tetris::Tetris()
 {
 	for (int i = 0; i < BOARD_M ; ++i)
@@ -138,76 +144,87 @@ void Tetris::Run()
 	unsigned int deltaTime;
 	oldTime = timeGetTime();
 
-	Brick test;
-	test.SetBrick(rand()%7);
+	Brick brick;
+	brick.SetBrick(rand()%7);
 	int rot = 0;
 
-	drawBrick(test.shape[rot]);
-	while (1)
+	drawBrick(brick.shape[rot]);
+	while (!IsGameOver())
 	{
 		deltaTime = timeGetTime() - oldTime;
 		if (_kbhit())
 		{
 			char ch = _getch();
 			switch (ch) {
+			
 			case DOWN:
 				++y;
-				if (IsColision(test.shape[rot])) {
+				if (IsColision(brick.shape[rot])) {
 					//Æ¯¼ö
 					--y;
-					StackBrick(test.shape[rot]);
+					StackBrick(brick.shape[rot]);
 					LineFull();
 					x = BRICK_START_X;
 					y = BRICK_START_Y;
-					test.SetBrick(rand() % 7);
+					brick.SetBrick(rand() % 7);
 
 				}
 				break;
 			case RIGHT:
 				++x;
-				if (IsColision(test.shape[rot])) {
+				if (IsColision(brick.shape[rot])) {
 					--x;
 				}
 				break;
 			case LEFT:
 				--x;
-				if (IsColision(test.shape[rot]))
+				if (IsColision(brick.shape[rot]))
 				{
 					++x;
 				}
 				break;
 			case SPACEBAR:
+				while (!IsColision(brick.shape[rot]))
+				{
+					++y;
+				}
+				y--;
+				StackBrick(brick.shape[rot]);
+				LineFull();
+				x = BRICK_START_X;
+				y = BRICK_START_Y;
+				brick.SetBrick(rand() % 7);
 				break;
-			case 'z':
+			case UP:
 				rot = ++rot % 4;
-				while(IsColision(test.shape[rot]))
+				while(IsColision(brick.shape[rot]))
 					rot = rot - 1 < 0 ? 4 : rot - 1;
 				break;
 			case 'd':
 				x = BRICK_START_X;
 				y = BRICK_START_Y;
-				test.SetBrick(rand() % 7);
+				brick.SetBrick(rand() % 7);
 				break;
 			}
 			system("cls");
 			drawBoard();
-			drawBrick(test.shape[rot]);
+			drawBrick(brick.shape[rot]);
 		}
 		if (deltaTime > gameSpeed)
 		{
 			y++;
-			if (IsColision(test.shape[rot])) {
+			if (IsColision(brick.shape[rot])) {
 				--y;
-				StackBrick(test.shape[rot]);
+				StackBrick(brick.shape[rot]);
 				LineFull();
 				x = BRICK_START_X;
 				y = BRICK_START_Y;
-				test.SetBrick(rand() % 7);
+				brick.SetBrick(rand() % 7);
 			}
 			oldTime = timeGetTime();
 			system("cls");
 			drawBoard();
-			drawBrick(test.shape[rot]);
+			drawBrick(brick.shape[rot]);
 		}
 	}
 

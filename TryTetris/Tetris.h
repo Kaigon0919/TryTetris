@@ -10,6 +10,7 @@
 #include"Brick.h"
 using namespace std;
 //Keyboard
+#define UP 72
 #define DOWN 80
 #define LEFT 75
 #define RIGHT 77
@@ -37,6 +38,7 @@ private:
 	void CursorView(char show);
 	void StackBrick(char (*brick)[5]);
 	void LineFull();
+	bool IsGameOver();
 public:
 	Tetris();
 	void Init();
