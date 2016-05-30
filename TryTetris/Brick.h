@@ -1,6 +1,6 @@
 #pragma once
 #ifndef __BRICK_H_
-#define __BROCK_H_
+#define __BRICK_H_
 
 const char ShapeBase[7 /*도형갯수*/][4/*회전모양*/][5][5]
 {
