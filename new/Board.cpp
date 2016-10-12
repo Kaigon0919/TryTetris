@@ -8,9 +8,9 @@ Board::Board(int row, int col) : row(row), col(col)
 		board[i] = new char[row];
 	}
 	// 모든 배열의 값을 0으로 초기화.
-	for (int i = 0; i < row; ++i)
+	for (int i = 0; i < col; ++i)
 	{
-		for (int j = 0; j < col; ++j)
+		for (int j = 0; j < row; ++j)
 		{
 			board[i][j] = 0;
 		}
@@ -27,7 +27,6 @@ Board::Board(int row, int col) : row(row), col(col)
 
 Board::~Board()
 {
-	std::cout << _msize(board) / sizeof(char*) << std::endl;
 	for (int i = 0; i < _msize(board) / sizeof(char*); ++i)
 	{
 		delete[] board[i];

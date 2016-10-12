@@ -31,6 +31,7 @@ private:
 	size_t waitingTime;
 private:
 	int iMarginX, iMarginY;
+	int boardCol, boardRow;
 public:
 	TetrisSystem();
 	~TetrisSystem();

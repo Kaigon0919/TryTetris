@@ -1,25 +1,25 @@
 #include "Draw.h"
 using namespace std;
 
-void Draw::Paint(char ** const ref)
+void Draw::Paint(char ** const ref, const Point &pos)
 {
 	int row, col;
 	col = _msize(ref) / sizeof(char*); //행의 크기를 체크.
 	row = _msize(ref[0])/ sizeof(char); //열의 크기를 체크.
 
 	//배열의 모든 값을 확인하여, 값에 따라 그림을 그린다. 벽, 쌓인 블럭 :3 , 블록 :1;
-	for (int i = 0; i < row; ++i)
+	for (int i = 0; i < col; ++i)
 	{
-		for (int j = 0; j < col; ++j)
+		for (int j = 0; j < row; ++j)
 		{
-			if (ref[j][i] == 3)
+			if (ref[i][j] == 3)
 			{
-				gotoxy(j*iMarginX, i * iMarginY);
+				gotoxy((i+pos.xpos)*iMarginX, (j+pos.ypos) * iMarginY);
 				cout << "■";
 			}
-			if (ref[j][i] > 0)
+			else if (ref[i][j] > 0)
 			{
-				gotoxy(j*iMarginX, i * iMarginY);
+				gotoxy((i + pos.xpos)*iMarginX, (j + pos.ypos) * iMarginY);
 				cout << "□";
 			}
 		}

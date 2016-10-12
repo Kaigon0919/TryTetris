@@ -238,9 +238,9 @@ public:
 	~Brick();
 
 	//Setter.
-	void SetType(int typeNumber);
-	void SetPosition(Point& position);
-	void SetRotate(int rotate);
+	void SetType(const int typeNumber);
+	void SetPosition(const Point& position);
+	void SetRotate(const int rotate);
 
 	//Getter.
 	Point GetPosition() const;

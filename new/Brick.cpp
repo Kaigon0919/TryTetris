@@ -30,7 +30,7 @@ void Brick::SetType(int typeNumber)
 	SettingArray();
 }
 
-void Brick::SetPosition(Point & position)
+void Brick::SetPosition(const Point & position)
 {
 	this->position.xpos = position.xpos;
 	this->position.ypos = position.ypos;

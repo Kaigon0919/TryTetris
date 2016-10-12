@@ -1,8 +1,8 @@
 #include "TryTetris.h"
 #include<stdio.h>
-TetrisSystem::TetrisSystem() : m_board(), m_brick(), waitingTime(2000), iMarginX(2), iMarginY(2) , oldTime()
+TetrisSystem::TetrisSystem() : m_board(), m_brick(), waitingTime(2000), iMarginX(2), iMarginY(1), oldTime() , boardCol(20), boardRow(15)
 {
-	m_board = new Board(10,20);
+	m_board = new Board(boardCol,boardRow);
 	m_brick = new Brick();
 	m_draw = new Draw(iMarginX, iMarginY);
 }
@@ -22,10 +22,14 @@ void TetrisSystem::Run()
 	oldTime = timeGetTime();
 
 	// First Draw.
-	m_draw->Paint(m_board->GetBoardArray());
+	m_draw->Paint(m_board->GetBoardArray(),Point(0,0));
 
+	// First Brick Set.
+	m_brick->SetPosition(Point(boardCol / 2, 0));
+	m_brick->SetType(rand() % 7);
+	m_brick->SetRotate(0);
 	// Play
-	while (m_board->IsGameOver())
+	while (!m_board->IsGameOver())
 	{
 		// Key Event.
 		if (_kbhit())
@@ -42,6 +46,7 @@ void TetrisSystem::Run()
 		{
 			CollisionSolve();
 		}
+		m_draw->Clear();
 		TetrisDraw();
 	}
 }
@@ -96,6 +101,6 @@ void TetrisSystem::CollisionSolve()
 
 void TetrisSystem::TetrisDraw()
 {
-	m_draw->Paint(m_board->GetBoardArray());
-	m_draw->Paint(m_brick->GetShapeArray());
+	m_draw->Paint(m_board->GetBoardArray(),Point(0,0));
+	m_draw->Paint(m_brick->GetShapeArray(),m_brick->GetPosition());
 }
