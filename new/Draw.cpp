@@ -12,6 +12,8 @@ void Draw::Paint(char ** const ref, const Point &pos)
 	{
 		for (int j = 0; j < row; ++j)
 		{
+			if (i + pos.xpos < 0 || j + pos.ypos < 0)
+				continue;
 			if (ref[i][j] == 3)
 			{
 				gotoxy((i+pos.xpos)*iMarginX, (j+pos.ypos) * iMarginY);

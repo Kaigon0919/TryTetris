@@ -20,7 +20,7 @@ Brick::~Brick()
 
 void Brick::SetRotate(int rotate)
 {
-	this->rotate= rotate;
+	this->rotate= rotate%4;
 	SettingArray();
 }
 
@@ -45,7 +45,15 @@ void Brick::Move(int xpos, int ypos)
 void Brick::Rotate()
 {
 	++rotate;
+	rotate %= 4;
 	SettingArray();
+}
+
+void Brick::Reset(const int TypeNumber, const Point & pos, const int rot)
+{
+	SetType(TypeNumber);
+	SetPosition(pos);
+	SetRotate(rot);
 }
 
 Point Brick::GetPosition() const

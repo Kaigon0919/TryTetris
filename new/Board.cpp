@@ -38,11 +38,11 @@ bool Board::IsCollision(char** const brick, const Point pos)
 {
 	for (int i = 0; i < 5; ++i)
 	{
-		if (i + pos.xpos < 0)
+		if (i + pos.xpos < 0 || i + pos.xpos >= col)
 			continue;
 		for (int j = 0; j < 5; ++j)
 		{
-			if (j + pos.ypos < 0)
+			if (j + pos.ypos < 0 || j + pos.ypos > row)
 				continue;
 			if (brick[i][j] + board[i + pos.xpos][j + pos.ypos] > 3)
 				return true;
@@ -85,7 +85,11 @@ void Board::StackBrick(char ** const brick, const Point pos)
 	for (int i = 0; i < 5; ++i)
 	{
 		for (int j = 0; j < 5; ++j)
+		{
+			if (i + pos.xpos < 0 || i + pos.xpos >= col || j + pos.ypos < 0 || j + pos.ypos >= row)
+				continue;
 			if (brick[i][j] != 0)
 				board[i + pos.xpos][j + pos.ypos] = 3;
+		}
 	}
 }
