@@ -1,5 +1,4 @@
 #include "Draw.h"
-using namespace std;
 
 void Draw::Paint(char ** const ref, const Point &pos)
 {

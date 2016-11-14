@@ -27,7 +27,7 @@ void TetrisSystem::Run()
 	// First Brick Set.
 	m_brick->Reset(rand() % 7, Point(boardCol / 2 - 2, -2), 0);
 
-	// Play
+	// Play.
 	while (!m_board->IsGameOver())
 	{
 		// Key Event.
@@ -85,6 +85,7 @@ void TetrisSystem::CollisionSolve()
 		m_brick->Move(1, 0);
 		if (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()))
 			m_brick->Move(-2, 0);
+		//버그 버그 버그~ ㄱ자 막대기 버그버그버그
 		break;
 	case RIGHT:
 		m_brick->Move(-1, 0);

@@ -5,6 +5,8 @@
 #include <iostream>
 #include<Windows.h>
 #include"MyUtil.h"
+using namespace std;
+
 class Draw {
 private:
 	const int iMarginX;
