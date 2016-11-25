@@ -15,4 +15,5 @@
 <ul  type="circle">
 <li>2016. 10. 11 : Console Tetris 새로 수정하고 있습니다.</li>
 <li>2016. 10. 14 : Console Tetris 수정판이 완성.</li>
+<li>2016. 11. 25 : new Tertris 오류 수정. 충돌처리 부분과 충돌처리를 위한 board.h 함수추가.</li>
 </ul>
