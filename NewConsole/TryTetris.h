@@ -38,6 +38,7 @@ public:
 	void Run();
 private:
 	void MessageProc();
+	void Coliision();
 	void CollisionSolve();
 	void TetrisDraw();
 };

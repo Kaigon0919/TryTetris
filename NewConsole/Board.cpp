@@ -45,10 +45,19 @@ bool Board::IsCollision(char** const brick, const Point pos)
 			if (j + pos.ypos < 0 || j + pos.ypos > row)
 				continue;
 			if (brick[i][j] + board[i + pos.xpos][j + pos.ypos] > 3)
+			{
+				//충돌이 난 블록배열의 위치 저장.
+				collisionPos.Set(i, j);
 				return true;
+			}
 		}
 	}
 	return false;
+}
+
+Point Board::GetCollisionPos() const
+{
+	return collisionPos;
 }
 
 bool Board::IsGameOver()

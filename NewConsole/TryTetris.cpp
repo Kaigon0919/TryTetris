@@ -34,6 +34,9 @@ void TetrisSystem::Run()
 		if (_kbhit())
 		{
 			MessageProc();
+			Coliision();
+			m_draw->Clear();
+			TetrisDraw();
 		}
 		// WaitingTime Event.
 		if (timeGetTime() - oldTime >= waitingTime)
@@ -41,14 +44,10 @@ void TetrisSystem::Run()
 			m_brick->Move(0, 1);
 			oldTime = timeGetTime();
 			input = KeyBoard::DOWN;
+			Coliision();
+			m_draw->Clear();
+			TetrisDraw();
 		}
-		// 움직인후 충돌체크, 충돌 일시 충돌 처리를 한다.
-		while (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()) && !m_board->IsGameOver())
-		{
-			CollisionSolve();
-		}
-		m_draw->Clear();
-		TetrisDraw();
 	}
 }
 
@@ -77,15 +76,23 @@ void TetrisSystem::MessageProc()
 	}
 }
 
+void TetrisSystem::Coliision()
+{
+	while (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()) && !m_board->IsGameOver())
+	{
+		CollisionSolve();
+		m_draw->Clear();
+		TetrisDraw();
+	}
+}
+
 void TetrisSystem::CollisionSolve()
 {
+	Point pos(m_board->GetCollisionPos());
 	switch (input)
 	{
 	case UP:
-		m_brick->Move(1, 0);
-		if (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()))
-			m_brick->Move(-2, 0);
-		//버그 버그 버그~ ㄱ자 막대기 버그버그버그
+		m_brick->Move(2-pos.xpos, 0);
 		break;
 	case RIGHT:
 		m_brick->Move(-1, 0);
