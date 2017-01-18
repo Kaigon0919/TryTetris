@@ -11,6 +11,12 @@
 <li>Compiler : MS Visual Studio 2015</li>
 <li>Ddevelopment period : 2016. Cannot remember ~ 2016. 10. 14</li>
 </ul>
+<ul>
+<h2>Ver.Api Tetris</h2>
+<li>Platform development language : C, C++</li>
+<li>Compiler : MS Visual Studio 2017</li>
+<li>Ddevelopment period : 2016. 12. 3</li>
+</ul>
 <br/>
 <ul  type="circle">
 <li>2016. 10. 11 : Console Tetris 새로 수정하고 있습니다.</li>
