@@ -29,6 +29,7 @@ private:
 	float oldTime;
 	float waitingTime;
 	WPARAM inputState;
+	bool isPause;
 public:
 	SystemClass();
 	SystemClass(const SystemClass &ref);

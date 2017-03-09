@@ -5,6 +5,7 @@ SystemClass::SystemClass()
 	m_brick = new Brick();
 	m_draw = new Draw(Point(10,10),20, 20);
 	srand((unsigned)time(NULL));
+	isPause = false;
 }
 
 SystemClass::SystemClass(const SystemClass & ref)
@@ -89,7 +90,7 @@ bool SystemClass::InitializeWindows()
 	RegisterClass(&WndClass);					//WndClass 특성을 저장.
 
 	// 윈도우 생성.
-	m_hwnd = CreateWindow(m_applicationName, m_applicationName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, m_hInstance, NULL);
+	m_hwnd = CreateWindow(m_applicationName, m_applicationName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 333, 480, NULL, NULL, m_hInstance, NULL);
 
 	// 윈도우 표시.
 	ShowWindow(m_hwnd, SW_SHOW);
@@ -100,6 +101,11 @@ bool SystemClass::InitializeWindows()
 bool SystemClass::Frame()
 {
 	curTime = (float)timeGetTime() * 0.001;
+	if (isPause)
+	{
+		oldTime = curTime;
+		return 0;
+	}
 	if (curTime - oldTime >= waitingTime && !m_board->IsGameOver())
 	{
 		m_brick->Move(0, 1);
@@ -113,10 +119,15 @@ bool SystemClass::Frame()
 
 void SystemClass::MessageProc(WPARAM wParam)
 {
+	if (isPause)
+	{
+		oldTime = curTime;
+		return;
+	}
 	inputState = wParam;
 	switch (inputState) {
 	case VK_UP:
-		m_brick->Rotate();
+		m_brick->Rotate(true);
 		break;
 	case VK_DOWN:
 		m_brick->Move(0, 1);
@@ -151,6 +162,11 @@ void SystemClass::CollisionSolve(WPARAM inputState)
 	{
 	case VK_UP:
 		m_brick->Move(2 - pos.xpos, 0);
+		if (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()))
+		{
+			m_brick->Rotate(false);
+			m_brick->Move(pos.xpos - 2, 0);
+		}
 		break;
 	case VK_RIGHT:
 		m_brick->Move(-1, 0);
@@ -183,14 +199,10 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 	switch (iMessage) {
 	case WM_CREATE:
 		return 0;
-	case WM_TIMER:
-		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd,&ps);
 		TetrisDraw(hdc);
 		EndPaint(hWnd, &ps);
-		return 0;
-	case WM_SIZE:
 		return 0;
 	case WM_CHAR:
 		switch (wParam)
@@ -201,14 +213,13 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		}
 		return 0;
 	case WM_KEYDOWN:
+		if (wParam == 'S')
+			isPause = isPause ? false : true;
 		if (m_board->IsGameOver())
 			return 0;
 		MessageProc(wParam);
 		Coliision();
 		InvalidateRect(m_hwnd, NULL, true);
-		//temp = to_wstring(wParam);
-		//lstrcpy(str, temp.c_str());
-		//InvalidateRect(hWnd, NULL, true);
 		return 0;
 	case WM_LBUTTONDOWN:
 		return 0;

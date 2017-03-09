@@ -42,11 +42,20 @@ void Brick::Move(int xpos, int ypos)
 	position.ypos += ypos;
 }
 
-void Brick::Rotate()
+void Brick::Rotate(bool clockwise)
 {
-	++rotate;
+	if (clockwise) ++rotate;
+	else
+	{
+		--rotate;
+		if (rotate < 0)
+		{
+			rotate = 4 - rotate;
+		}
+	}
 	rotate %= 4;
 	SettingArray();
+
 }
 
 void Brick::Reset(const int TypeNumber, const Point & pos, const int rot)

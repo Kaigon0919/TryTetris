@@ -29,7 +29,7 @@ public:
 
 	//Funsion.
 	void Move(int xpos, int ypos);
-	void Rotate();
+	void Rotate(bool clockwise);
 	void Reset(const int TypeNumber, const Point& pos, const int rot);
 private:
 	//ShapeBase로부터 도형타입, 회전타입에 따라 값을 복사해오는 함수.
