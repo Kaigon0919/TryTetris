@@ -112,7 +112,7 @@ bool SystemClass::Frame()
 		oldTime = curTime ;
 		inputState = VK_DOWN;
 		Coliision();
-		InvalidateRect(m_hwnd, NULL, true);
+		InvalidateRect(m_hwnd, NULL, false);
 	}
 	return false;
 }
@@ -185,9 +185,25 @@ void SystemClass::CollisionSolve(WPARAM inputState)
 
 void SystemClass::TetrisDraw(HDC hdc)
 {
-	m_draw->PaintBackGround(m_board->GetColRow(), hdc);
-	m_draw->Paint(m_board->GetBoardArray(), Point(0, 0),hdc);
-	m_draw->Paint(m_brick->GetShapeArray(), m_brick->GetPosition(),hdc);
+	HDC MemDC;
+	HBITMAP MyBit,OldBit;
+	RECT rect;
+	GetClientRect(m_hwnd, &rect);
+
+	MemDC = CreateCompatibleDC(hdc);
+	MyBit = CreateBitmap(rect.right - rect.left, rect.bottom - rect.top, 1, 32, NULL);
+	OldBit = (HBITMAP)SelectObject(MemDC, MyBit);
+	FillRect(MemDC, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));	
+
+	m_draw->PaintBackGround(m_board->GetColRow(), MemDC);
+	m_draw->Paint(m_board->GetBoardArray(), Point(0, 0), MemDC);
+	m_draw->Paint(m_brick->GetShapeArray(), m_brick->GetPosition(), MemDC);
+
+	BitBlt(hdc, 0, 0, rect.right, rect.bottom, MemDC, 0, 0, SRCCOPY);
+
+	SelectObject(MemDC, OldBit);
+	DeleteObject(MyBit);
+	DeleteDC(MemDC);
 }
 
 LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -219,7 +235,7 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 			return 0;
 		MessageProc(wParam);
 		Coliision();
-		InvalidateRect(m_hwnd, NULL, true);
+		InvalidateRect(m_hwnd, NULL, false);
 		return 0;
 	case WM_LBUTTONDOWN:
 		return 0;
