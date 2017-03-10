@@ -191,7 +191,8 @@ void SystemClass::TetrisDraw(HDC hdc)
 	GetClientRect(m_hwnd, &rect);
 
 	MemDC = CreateCompatibleDC(hdc);
-	MyBit = CreateBitmap(rect.right - rect.left, rect.bottom - rect.top, 1, 32, NULL);
+	//MyBit = CreateBitmap(rect.right - rect.left, rect.bottom - rect.top, 1, 32, NULL);
+	MyBit = CreateCompatibleBitmap(hdc, rect.right - rect.left, rect.bottom - rect.top);
 	OldBit = (HBITMAP)SelectObject(MemDC, MyBit);
 	FillRect(MemDC, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));	
 
