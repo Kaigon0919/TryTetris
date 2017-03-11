@@ -81,7 +81,7 @@ bool SystemClass::InitializeWindows()
 	WndClass.cbWndExtra = 0;					//예약영역2, 이하 동일
 	WndClass.hbrBackground = (HBRUSH)GetStockObject(COLOR_WINDOW + 1);   //윈도우의 배경 색상을 지정.
 	WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);			//마우스 커서 지정.
-	WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);		//아이콘 지정.
+	WndClass.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1));		//아이콘 지정.
 	WndClass.hInstance = m_hInstance;					//윈도우 클래스를 등록하는 프로그램의 번호로 WinMain의 hInstance를 주면 된다.
 	WndClass.lpfnWndProc = WndProc;					//메세지를 처리할 함수.(중요!)
 	WndClass.lpszClassName = m_applicationName;				//프로그램 클래스의 이름 등록.
