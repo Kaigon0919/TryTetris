@@ -65,6 +65,7 @@ void SystemClass::Shutdown()
 
 bool SystemClass::InitializeWindows()
 {
+	TEXT("TEST");
 	// WndProc에서 해당 객체로 접근 가능하게 static 포인터에 해당 객체를 넘김.
 	ApplicationHandle = this;
 
@@ -94,7 +95,7 @@ bool SystemClass::InitializeWindows()
 
 	// 윈도우 표시.
 	ShowWindow(m_hwnd, SW_SHOW);
-
+	
 	return true;
 }
 
