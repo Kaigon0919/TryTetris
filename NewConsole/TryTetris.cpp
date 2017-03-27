@@ -56,7 +56,7 @@ void TetrisSystem::MessageProc()
 	input = (KeyBoard)_getch();
 	switch (input) {
 	case UP:
-		m_brick->Rotate();
+		m_brick->Rotate(true);
 		break;
 	case DOWN:
 		m_brick->Move(0, 1);
@@ -93,6 +93,11 @@ void TetrisSystem::CollisionSolve()
 	{
 	case UP:
 		m_brick->Move(2-pos.xpos, 0);
+		if (m_board->IsCollision(m_brick->GetShapeArray(), m_brick->GetPosition()))
+		{
+			m_brick->Rotate(false);
+			m_brick->Move(pos.xpos - 2, 0);
+		}
 		break;
 	case RIGHT:
 		m_brick->Move(-1, 0);
