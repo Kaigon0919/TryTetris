@@ -1,9 +1,6 @@
 #pragma once
-#ifndef __BOARD_H_
-#define __BOARD_H_
-
 #include "MyUtil.h"
-
+#include<Windows.h>
 class Board
 {
 private:
@@ -11,7 +8,7 @@ private:
 	size_t row, col;
 	Point collisionPos;
 public:
-	Board(int row, int col);
+	Board::Board(int row, int col);
 	~Board();
 	bool Init();
 	bool IsCollision(char** const brick, const Point pos);
@@ -23,5 +20,6 @@ public:
 		return board;
 	}
 	Point GetColRow() const { return Point(col, row); }
+
+	void Draw(HDC hdc, Point startPos, float fMarginX, float fMarginY);
 };
-#endif

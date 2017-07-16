@@ -7,12 +7,12 @@
 #include<string>
 #include<iostream>
 #include<time.h>
+#include<vector>
 using namespace std;
 
 #include"resource.h"
-#include"Draw.h"
-#include"Board.h"
-#include"Brick.h"
+#include"Tetris.h"
+#include"Title.h"
 
 #pragma comment(lib,"winmm.lib")
 class SystemClass
@@ -21,14 +21,12 @@ private:
 	HWND m_hwnd;
 	LPCTSTR m_applicationName;
 	HINSTANCE m_hInstance;
+
+	vector<Mode*> m_Mode;
+	int stateNum;
 private:
-	Board *m_board;
-	Brick *m_brick;
-	Draw *m_draw;
 	float curTime;
 	float oldTime;
-	float waitingTime;
-	WPARAM inputState;
 	bool isPause;
 public:
 	SystemClass();
@@ -45,9 +43,6 @@ private:
 	bool Frame();
 private:
 	void MessageProc(WPARAM wParam);
-	void Coliision();
-	void CollisionSolve(WPARAM wParam);
-	void TetrisDraw(HDC hdc);
 
 };
 static SystemClass * ApplicationHandle = 0;

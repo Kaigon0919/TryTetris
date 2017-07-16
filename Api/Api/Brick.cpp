@@ -65,6 +65,40 @@ void Brick::Reset(const int TypeNumber, const Point & pos, const int rot)
 	SetRotate(rot);
 }
 
+void Brick::Draw(HDC hdc, Point startPos, float fMarginX, float fMarginY)
+{
+	RECT rect;
+	HBRUSH brickBrush, oldBrush;
+
+	//Brush Setting
+	oldBrush = 0;
+	brickBrush = CreateSolidBrush(RGB(255, 255, 255));
+	oldBrush = (HBRUSH)SelectObject(hdc, brickBrush);
+
+	//Draw
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			if (i + position.xpos < 0 || j + position.ypos-1 < 0)
+				continue;
+			if (shape[i][j] > 0)
+			{
+				rect.left = (i + position.xpos)*fMarginX + startPos.xpos;
+				rect.top = (j + position.ypos-1)*fMarginY + startPos.ypos;
+				rect.right = (i + position.xpos)*fMarginX + fMarginX *0.9 + startPos.xpos;
+				rect.bottom = (j + position.ypos-1)*fMarginY + fMarginY *0.9 + startPos.ypos;
+				Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+			}
+		}
+	}
+	//예전의 펜값을 다시 dc에 지정해준다. 
+	SelectObject(hdc, oldBrush);
+	//쓰고난 펜을 삭제해준다.
+	DeleteObject(brickBrush);
+	DeleteObject(oldBrush);
+}
+
 Point Brick::GetPosition() const
 {
 	return position;

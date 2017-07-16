@@ -4,7 +4,7 @@
 #define __BRICK_H_
 
 #include "MyUtil.h"
-
+#include<Windows.h>
 class Brick
 {
 private:
@@ -31,10 +31,14 @@ public:
 	void Move(int xpos, int ypos);
 	void Rotate(bool clockwise);
 	void Reset(const int TypeNumber, const Point& pos, const int rot);
+	void Draw(HDC hdc, Point startPos, float fMarginX, float fMarginY);
 private:
 	//ShapeBase로부터 도형타입, 회전타입에 따라 값을 복사해오는 함수.
 	void SettingArray();
 };
+
+
+
 
 const char ShapeBase[7 /*도형갯수*/][4/*회전모양*/][5][5]
 {
