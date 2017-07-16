@@ -101,6 +101,15 @@ bool SystemClass::InitializeWindows()
 
 bool SystemClass::Frame()
 {
+	// 상태변환 확인
+	int newState = m_Mode[stateNum]->IsNewState();
+	if (newState != -1)
+	{
+		ChangeState(newState);
+		return true;
+	}
+
+	// 플레이.
 	curTime = (float)timeGetTime() * 0.001;
 	m_Mode[stateNum]->Update(curTime - oldTime);
 	oldTime = curTime;
@@ -113,9 +122,6 @@ void SystemClass::MessageProc(WPARAM wParam)
 {
 	switch (wParam)
 	{
-	case 'R':
-		ChangeState(stateNum);
-		break;
 	default:
 		m_Mode[stateNum]->KeyEvent(wParam);
 		break;

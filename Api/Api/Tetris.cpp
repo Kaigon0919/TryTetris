@@ -65,6 +65,12 @@ void Tetris::KeyEvent(WPARAM wParam)
 	case 'S':
 		isPause = isPause ? false : true;
 		break;
+	case 'R':
+		ChangeState(1);
+		break;
+	case 'Q':
+		ChangeState(0);
+		break;
 	}
 	
 	if (m_board->IsGameOver() || isPause)
