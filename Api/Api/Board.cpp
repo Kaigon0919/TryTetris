@@ -2,10 +2,10 @@
 #include<iostream>
 Board::Board(int row, int col) : row(row+1), col(col)
 {
-	board = new char*[col];
-	for (int i = 0; i < col; ++i)
+	board = new char*[this->col];
+	for (int i = 0; i < this->col; ++i)
 	{
-		board[i] = new char[row];
+		board[i] = new char[this->row];
 	}
 	Init();
 }
