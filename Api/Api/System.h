@@ -42,6 +42,7 @@ private:
 	bool Frame();
 private:
 	void MessageProc(WPARAM wParam);
+	void ChangeState(int idx);
 
 };
 static SystemClass * ApplicationHandle = 0;

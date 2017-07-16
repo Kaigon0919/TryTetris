@@ -111,7 +111,21 @@ bool SystemClass::Frame()
 
 void SystemClass::MessageProc(WPARAM wParam)
 {
-	m_Mode[stateNum]->KeyEvent(wParam);
+	switch (wParam)
+	{
+	case 'R':
+		ChangeState(stateNum);
+		break;
+	default:
+		m_Mode[stateNum]->KeyEvent(wParam);
+		break;
+	}
+}
+void SystemClass::ChangeState(int idx)
+{
+	m_Mode[stateNum]->Shutdown();
+	stateNum = idx;
+	m_Mode[idx]->Initialization();
 }
 LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {

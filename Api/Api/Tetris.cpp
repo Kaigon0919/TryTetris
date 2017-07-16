@@ -61,8 +61,11 @@ void Tetris::Shutdown()
 
 void Tetris::KeyEvent(WPARAM wParam)
 {
-	if (wParam == 'S')
+	switch (wParam) {
+	case 'S':
 		isPause = isPause ? false : true;
+		break;
+	}
 	
 	if (m_board->IsGameOver() || isPause)
 		return;
