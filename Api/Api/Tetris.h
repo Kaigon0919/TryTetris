@@ -10,7 +10,7 @@ private:
 	float watingTime;
 	float nextFrameTime;
 	WPARAM inputState;
-
+	bool isPause;
 	enum Margin { x = 20, y = 20 };
 	Point startPos;
 public:

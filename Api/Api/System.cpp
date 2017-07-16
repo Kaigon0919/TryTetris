@@ -3,7 +3,6 @@ SystemClass::SystemClass()
 {
 	stateNum = 1;
 	srand((unsigned)time(NULL));
-	isPause = false;
 
 	m_Mode.push_back(new Title);
 	m_Mode.push_back(new Tetris);
@@ -103,11 +102,6 @@ bool SystemClass::InitializeWindows()
 bool SystemClass::Frame()
 {
 	curTime = (float)timeGetTime() * 0.001;
-	if (isPause)
-	{
-		oldTime = curTime;
-		return true;
-	}
 	m_Mode[stateNum]->Update(curTime - oldTime);
 	oldTime = curTime;
 	InvalidateRect(m_hwnd, NULL, false);
@@ -117,19 +111,12 @@ bool SystemClass::Frame()
 
 void SystemClass::MessageProc(WPARAM wParam)
 {
-	if (isPause)
-	{
-		oldTime = curTime;
-		return;
-	}
 	m_Mode[stateNum]->KeyEvent(wParam);
 }
 LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
 	PAINTSTRUCT ps;
-	static TCHAR str[128] = TEXT("ABC");
-	wstring temp;
 	switch (iMessage) {
 	case WM_CREATE:
 		return 0;
@@ -147,8 +134,6 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		}
 		return 0;
 	case WM_KEYDOWN:
-		if (wParam == 'S')
-			isPause = isPause ? false : true;
 		MessageProc(wParam);
 		//InvalidateRect(m_hwnd, NULL, false);
 		return 0;

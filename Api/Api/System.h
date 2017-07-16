@@ -27,7 +27,6 @@ private:
 private:
 	float curTime;
 	float oldTime;
-	bool isPause;
 public:
 	SystemClass();
 	SystemClass(const SystemClass &ref);

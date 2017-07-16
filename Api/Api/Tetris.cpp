@@ -12,10 +12,13 @@ void Tetris::Initialization()
 	watingTime = 0;
 	nextFrameTime = 1;
 	srand((unsigned)time(NULL));
+	isPause = false;
 }
 
 void Tetris::Update(float dt)
 {
+	if (isPause)
+		return;
 	watingTime += dt;
 	if (watingTime >= nextFrameTime && !m_board->IsGameOver()) {
 		m_brick->Move(0, 1);
@@ -58,7 +61,10 @@ void Tetris::Shutdown()
 
 void Tetris::KeyEvent(WPARAM wParam)
 {
-	if (m_board->IsGameOver())
+	if (wParam == 'S')
+		isPause = isPause ? false : true;
+	
+	if (m_board->IsGameOver() || isPause)
 		return;
 	inputState = wParam;
 	switch (inputState) {
