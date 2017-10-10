@@ -3,7 +3,8 @@
 <h2>Tetris Ver.Api</h2>
 <li>Platform development language : C, C++</li>
 <li>Compiler : MS Visual Studio 2017</li>
-===============================================================
+
+---------------------------------------------------------------------------------------------
 <ul  type="circle">
 <li>2017. 10. 11 : Title 구현, Tetris게임내 재시작, 종료, 플레이타임, 게임오버 구현.</li>
 <li>2016. 12. 02 : Tetris Ver.Api 제작.</li>
