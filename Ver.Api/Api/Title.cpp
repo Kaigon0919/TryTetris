@@ -2,13 +2,13 @@
 
 void Title::Initialization()
 {
-	titleBitmap = LoadBitmap(GethInstance(), MAKEINTRESOURCE(IDB_BITMAP1));
+	titleBitmap = LoadBitmap(GetHInstance(), MAKEINTRESOURCE(IDB_BITMAP1));
 
 	HWND hWnd = GetHWnd();
 	RECT rect;
 	GetClientRect(hWnd, &rect);
-	StartButton = CreateWindow(TEXT("button"), TEXT("Start"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, (rect.right - rect.left)/2 - (300/2) , (rect.bottom - rect.top)*0.6, 300, 50, hWnd, (HMENU)0, GethInstance(), NULL);
-	EndButton = CreateWindow(TEXT("button"), TEXT("Exit"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, (rect.right - rect.left) / 2 - (300 / 2), (rect.bottom - rect.top)*0.6 + 70, 300, 50, hWnd, (HMENU)1, GethInstance(), NULL);
+	StartButton = CreateWindow(TEXT("button"), TEXT("Start"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, (rect.right - rect.left)/2 - (300/2) , (rect.bottom - rect.top)*0.6, 300, 50, hWnd, (HMENU)0, GetHInstance(), NULL);
+	EndButton = CreateWindow(TEXT("button"), TEXT("Exit"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, (rect.right - rect.left) / 2 - (300 / 2), (rect.bottom - rect.top)*0.6 + 70, 300, 50, hWnd, (HMENU)1, GetHInstance(), NULL);
 }
 
 void Title::Update(float dt)

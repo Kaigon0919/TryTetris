@@ -19,9 +19,10 @@ bool SystemClass::Initialize()
 	if (!InitializeWindows())
 		return false;
 
+	// 시간 초기화.
 	curTime = oldTime = (float)timeGetTime() * 0.001;
 	
-
+	// 게임모드를 객체화 후 vector에 넣습니다.
 	m_Mode.push_back(new Title(m_hInstance,m_hwnd));
 	m_Mode.push_back(new Tetris(m_hInstance, m_hwnd));
 	m_Mode[stateNum]->Initialization();

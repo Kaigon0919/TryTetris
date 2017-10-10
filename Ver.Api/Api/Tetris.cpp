@@ -25,37 +25,34 @@ void Tetris::Initialization()
 	GetClientRect(hWnd, &rect);
 	int x = 315;
 	int y = 285;
-	ReGameButton = CreateWindow(TEXT("button"), TEXT("ReGame"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, 100, 50, hWnd, (HMENU)0, GethInstance(), NULL);
-	EndButton = CreateWindow(TEXT("button"), TEXT("Exit"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y + 55, 100, 50, hWnd, (HMENU)1, GethInstance(), NULL);
-	PauseButton = CreateWindow(TEXT("button"), TEXT("Pause"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y - 55, 100, 50, hWnd, (HMENU)2, GethInstance(), NULL);
-	PlayTimeStatic = CreateWindow(TEXT("static"),TEXT("0시 0분 0초"), WS_CHILD | WS_VISIBLE , x, 110, 100, 30, hWnd, (HMENU)-1, GethInstance(), NULL);
+	ReGameButton = CreateWindow(TEXT("button"), TEXT("ReGame"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y, 100, 50, hWnd, (HMENU)0, GetHInstance(), NULL);
+	EndButton = CreateWindow(TEXT("button"), TEXT("Exit"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y + 55, 100, 50, hWnd, (HMENU)1, GetHInstance(), NULL);
+	PauseButton = CreateWindow(TEXT("button"), TEXT("Pause"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, x, y - 55, 100, 50, hWnd, (HMENU)2, GetHInstance(), NULL);
+	PlayTimeStatic = CreateWindow(TEXT("static"),TEXT("0시 0분 0초"), WS_CHILD | WS_VISIBLE , x, 110, 100, 30, hWnd, (HMENU)-1, GetHInstance(), NULL);
 
-	GameOverBitmap = LoadBitmap(GethInstance(), MAKEINTRESOURCE(IDB_BITMAP2));
+	GameOverBitmap = LoadBitmap(GetHInstance(), MAKEINTRESOURCE(IDB_BITMAP2));
 }
 
 void Tetris::Update(float dt)
 {
+	// 게임 오버 혹은 게임 정지 시 Update를 처리하지 않습니다.
 	if (isPause || m_board->IsGameOver())
 		return;
+
 	watingTime += dt;
 
+	// 사이즈 조정, 버그등 으로 인한 dt가 커졌을때 플레이타임이 커지지 않게 방지.
 	if (dt > nextFrameTime)
 		playTime += nextFrameTime;
 	else
 		playTime += dt;
 
-	int h = static_cast<int>(playTime / 3600);
-	int m = static_cast<int>(playTime / 60) % 60;
-	int s = static_cast<int>(playTime) % 60;
-	if (beforePlayTime.s != s)
-	{
-		wstring pt = to_wstring(h) + L"시 " + to_wstring(m) + L"분 " + to_wstring(s) + L"초";
-		SetWindowText(PlayTimeStatic, pt.c_str());
-		beforePlayTime = { h,m,s };
-	}
+	// 플레이타임을 표시.
+	DrawPlayTime();
+	
 	if (watingTime >= nextFrameTime) {
 		m_brick->Move(0, 1);
-		watingTime = 0; // watingTime -= nextFrameTime.
+		watingTime = 0; // dt가 클 경우 떨어지는 간격이 달라지지 않게 0으로 설정. 
 		inputState = VK_DOWN;
 		Coliision();
 	}
@@ -79,9 +76,11 @@ void Tetris::Draw(HDC hdc)
 	m_brick->Draw(MemDC, startPos, Margin::x, Margin::y);
 	AfterBrick(MemDC, Point(startPos.xpos + Margin::x * 15 + 5, startPos.ypos - Margin::y*0.2));
 
+	// 게임 오버일 경우 게임오버를 그려줍니다.
 	if (m_board->IsGameOver())
 		DrawImage(MemDC, 0, (rect.bottom - rect.top) / 2 - 90, GameOverBitmap);
 
+	// 백버퍼에 그린 그림을 화면에 출력합니다.
 	BitBlt(hdc, 0, 0, rect.right, rect.bottom, MemDC, 0, 0, SRCCOPY);
 
 	SelectObject(MemDC, OldBit);
@@ -104,20 +103,9 @@ void Tetris::Shutdown()
 
 void Tetris::KeyEvent(WPARAM wParam)
 {
-	switch (wParam) {
-	case 'S':
-		isPause = isPause ? false : true;
-		break;
-	case 'R':
-		ChangeState(1);
-		break;
-	case 'Q':
-		ChangeState(0);
-		break;
-	}
-
 	if (m_board->IsGameOver() || isPause)
 		return;
+
 	inputState = wParam;
 	switch (inputState) {
 	case VK_UP:
@@ -188,6 +176,15 @@ void Tetris::AfterBrick(HDC hdc, const Point& position)
 
 void Tetris::DrawPlayTime()
 {
+	int h = static_cast<int>(playTime / 3600);
+	int m = static_cast<int>(playTime / 60) % 60;
+	int s = static_cast<int>(playTime) % 60;
+	if (beforePlayTime.s != s)
+	{
+		wstring pt = to_wstring(h) + L"시 " + to_wstring(m) + L"분 " + to_wstring(s) + L"초";
+		SetWindowText(PlayTimeStatic, pt.c_str());
+		beforePlayTime = { h,m,s };
+	}
 }
 
 void Tetris::CommandEvent(WPARAM wParam)

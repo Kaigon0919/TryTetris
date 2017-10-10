@@ -9,7 +9,7 @@ private:
 	HINSTANCE hInstance;
 	HWND hWnd;
 protected:
-	const HINSTANCE GethInstance()const {
+	const HINSTANCE GetHInstance()const {
 		return hInstance;
 	}
 	const HWND GetHWnd()const {
