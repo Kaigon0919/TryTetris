@@ -29,4 +29,9 @@ struct Point
 	}
 };
 
+struct MyTime {
+	int h;
+	int m;
+	int s;
+};
 #endif

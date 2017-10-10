@@ -167,6 +167,8 @@
     <ResourceCompile Include="Api.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\gameover.bmp" />
+    <Image Include="data\title.bmp" />
     <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

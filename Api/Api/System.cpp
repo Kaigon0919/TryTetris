@@ -1,11 +1,8 @@
 #include "System.h"
 SystemClass::SystemClass()
 {
-	stateNum = 1;
+	stateNum = 0;
 	srand((unsigned)time(NULL));
-
-	m_Mode.push_back(new Title);
-	m_Mode.push_back(new Tetris);
 }
 
 SystemClass::SystemClass(const SystemClass & ref)
@@ -23,6 +20,10 @@ bool SystemClass::Initialize()
 		return false;
 
 	curTime = oldTime = (float)timeGetTime() * 0.001;
+	
+
+	m_Mode.push_back(new Title(m_hInstance,m_hwnd));
+	m_Mode.push_back(new Tetris(m_hInstance, m_hwnd));
 	m_Mode[stateNum]->Initialization();
 	return true;
 }
@@ -91,7 +92,7 @@ bool SystemClass::InitializeWindows()
 	RegisterClass(&WndClass);					//WndClass 특성을 저장.
 
 	// 윈도우 생성.
-	m_hwnd = CreateWindow(m_applicationName, m_applicationName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 333, 480, NULL, NULL, m_hInstance, NULL);
+	m_hwnd = CreateWindow(m_applicationName, m_applicationName, WS_OVERLAPPEDWINDOW|WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT, 480, 480, NULL, NULL, m_hInstance, NULL);
 
 	// 윈도우 표시.
 	ShowWindow(m_hwnd, SW_SHOW);
@@ -102,10 +103,11 @@ bool SystemClass::InitializeWindows()
 bool SystemClass::Frame()
 {
 	// 상태변환 확인
-	int newState = m_Mode[stateNum]->IsNewState();
+	int newState = m_Mode[stateNum]->GetNewState();
 	if (newState != -1)
 	{
 		ChangeState(newState);
+
 		return true;
 	}
 
@@ -117,18 +119,9 @@ bool SystemClass::Frame()
 
 	return true;
 }
-
-void SystemClass::MessageProc(WPARAM wParam)
-{
-	switch (wParam)
-	{
-	default:
-		m_Mode[stateNum]->KeyEvent(wParam);
-		break;
-	}
-}
 void SystemClass::ChangeState(int idx)
 {
+	m_Mode[stateNum]->SetNewState(false);
 	m_Mode[stateNum]->Shutdown();
 	stateNum = idx;
 	m_Mode[idx]->Initialization();
@@ -142,8 +135,11 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		return 0;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd,&ps);
-		m_Mode[stateNum]->Draw(hWnd,hdc);
+		m_Mode[stateNum]->Draw(hdc);
 		EndPaint(hWnd, &ps);
+		return 0;
+	case WM_COMMAND:
+		m_Mode[stateNum]->CommandEvent(wParam);
 		return 0;
 	case WM_CHAR:
 		switch (wParam)
@@ -154,10 +150,7 @@ LRESULT SystemClass::MessageHandler(HWND hWnd, UINT iMessage, WPARAM wParam, LPA
 		}
 		return 0;
 	case WM_KEYDOWN:
-		MessageProc(wParam);
-		//InvalidateRect(m_hwnd, NULL, false);
-		return 0;
-	case WM_LBUTTONDOWN:
+		m_Mode[stateNum]->KeyEvent(wParam);
 		return 0;
 	}
 	return DefWindowProc(hWnd, iMessage, wParam, lParam);

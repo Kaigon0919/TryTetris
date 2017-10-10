@@ -1,13 +1,7 @@
 #include "Board.h"
-#include<iostream>
-Board::Board(int row, int col) : row(row+1), col(col)
+Board::Board()
 {
-	board = new char*[this->col];
-	for (int i = 0; i < this->col; ++i)
-	{
-		board[i] = new char[this->row];
-	}
-	Init();
+
 }
 
 Board::~Board()
@@ -21,23 +15,36 @@ Board::~Board()
 
 bool Board::Init()
 {
-	// 모든 배열의 값을 0으로 초기화.
-	for (int i = 0; i < col; ++i)
+
+	/* 파일 입력 */
+	ifstream fin;
+	fin.open("stage1.txt");
+	string tempStr;
+	char tempChar;
+	fin >> tempStr >> tempChar;
+	fin >> row;
+	fin >> tempStr >> tempChar;
+	fin >> col;
+
+	// 동적 할당.
+	board = new char*[this->col];
+	for (int i = 0; i < this->col; ++i)
 	{
-		for (int j = 0; j < row; ++j)
-		{
-			board[i][j] = 0;
-		}
+		board[i] = new char[this->row];
 	}
-	// 벽을 표시.
+
+	// 보드 셋팅.
+	char inputData = 0;
 	for (int i = 0; i < row; ++i)
 	{
-		board[0][i] = 3;
-		board[col - 1][i] = 3;
+		for (int j = 0; j < col; ++j)
+		{
+			fin >> inputData;
+			board[j][i] = inputData-48;
+		}
 	}
-	for (int i = 0; i < col; ++i)
-		board[i][row - 1] = 3;
-	return false;
+	fin.close();
+	return true;
 }
 
 bool Board::IsCollision(char** const brick, const Point pos)
@@ -70,7 +77,7 @@ bool Board::IsGameOver()
 {
 	for (int i = 0; i < col; ++i)
 	{
-		if (i < 1 || i >= col-1)
+		if (i < 1 || i >= col - 1)
 			continue;
 		if (board[i][0] >= 3)
 			return true;
@@ -119,7 +126,7 @@ void Board::StackBrick(char ** const brick, const Point pos)
 void Board::Draw(HDC hdc, Point startPos, float fMarginX, float fMarginY)
 {
 	//BackGround
-	Rectangle(hdc, startPos.xpos - fMarginX*0.2, startPos.ypos - fMarginY*0.2, startPos.xpos + fMarginX*col + fMarginX*0.1, startPos.ypos + fMarginY*(row-1) + fMarginY*0.1);
+	Rectangle(hdc, startPos.xpos - fMarginX*0.2, startPos.ypos - fMarginY*0.2, startPos.xpos + fMarginX*col + fMarginX*0.1, startPos.ypos + fMarginY*(row - 1) + fMarginY*0.1);
 
 	RECT rect;
 	HBRUSH boardBrush, stackBrush, oldBrush;
@@ -139,22 +146,22 @@ void Board::Draw(HDC hdc, Point startPos, float fMarginX, float fMarginY)
 			if (board[i][j] == 3)
 			{
 				if (i == 0 || i == col - 1 || j == row - 1)
-					(HBRUSH)SelectObject(hdc, boardBrush);
+					oldBrush = (HBRUSH)SelectObject(hdc, boardBrush);
 				else
-					(HBRUSH)SelectObject(hdc, stackBrush);
+					oldBrush = (HBRUSH)SelectObject(hdc, stackBrush);
 
 				rect.left = i*fMarginX + startPos.xpos;
-				rect.top = (j-1)*fMarginY + startPos.ypos;
+				rect.top = (j - 1)*fMarginY + startPos.ypos;
 				rect.right = i*fMarginX + fMarginX *0.9 + startPos.xpos;
-				rect.bottom = (j-1)*fMarginY + fMarginY *0.9 + startPos.ypos;
+				rect.bottom = (j - 1)*fMarginY + fMarginY *0.9 + startPos.ypos;
 				Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
 			}
 			else if (board[i][j] > 0)
 			{
 				rect.left = i* fMarginX + startPos.xpos;
-				rect.top = (j-1) * fMarginY + startPos.ypos;
+				rect.top = (j - 1) * fMarginY + startPos.ypos;
 				rect.right = i * fMarginX + fMarginX *0.9 + startPos.xpos;
-				rect.bottom = (j-1) *fMarginY + fMarginY *0.9 + startPos.ypos;
+				rect.bottom = (j - 1) *fMarginY + fMarginY *0.9 + startPos.ypos;
 				Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
 			}
 		}

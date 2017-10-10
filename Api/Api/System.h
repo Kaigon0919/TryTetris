@@ -41,7 +41,6 @@ private:
 	bool InitializeWindows();
 	bool Frame();
 private:
-	void MessageProc(WPARAM wParam);
 	void ChangeState(int idx);
 
 };

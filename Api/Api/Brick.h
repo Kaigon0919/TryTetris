@@ -1,7 +1,4 @@
 #pragma once
-#pragma once
-#ifndef __BRICK_H_
-#define __BRICK_H_
 
 #include "MyUtil.h"
 #include<Windows.h>
@@ -26,6 +23,7 @@ public:
 	char** GetShapeArray() const {
 		return shape;
 	}
+	int GetTypeNumber()const { return typeNumber; }
 
 	//Funsion.
 	void Move(int xpos, int ypos);
@@ -260,4 +258,3 @@ const char ShapeBase[7 /*도형갯수*/][4/*회전모양*/][5][5]
 		}
 	}
 };
-#endif

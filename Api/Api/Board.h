@@ -1,6 +1,11 @@
 #pragma once
 #include "MyUtil.h"
 #include<Windows.h>
+#include <fstream>
+#include<iostream>
+#include<string>
+using namespace std;
+
 class Board
 {
 private:
@@ -8,7 +13,7 @@ private:
 	size_t row, col;
 	Point collisionPos;
 public:
-	Board::Board(int row, int col);
+	Board::Board();
 	~Board();
 	bool Init();
 	bool IsCollision(char** const brick, const Point pos);
